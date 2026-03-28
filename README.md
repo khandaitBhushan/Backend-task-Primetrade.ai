@@ -50,6 +50,65 @@ The API is comprehensively documented natively using Swagger. Once the backend b
 | `PUT`  | `/api/v1/tasks/{id}` | Update an existing task | Yes (JWT) |
 | `DELETE` | `/api/v1/tasks/{id}` | Permanently delete a task | Yes (JWT) |
 
+### 📬 Postman / API Request Guide
+If you prefer to test via Postman natively without Swagger, here is the exact step-by-step structure for each endpoint. Ensure you set the `Content-Type` header to `application/json`.
+
+#### 1. Register User (`POST /api/v1/auth/register`)
+- **URL**: `http://localhost:8080/api/v1/auth/register`
+- **Body (JSON)**:
+  ```json
+  {
+    "username": "admin",
+    "password": "password123",
+    "role": "ROLE_ADMIN" 
+  }
+  ```
+
+#### 2. Login User (`POST /api/v1/auth/login`)
+- **URL**: `http://localhost:8080/api/v1/auth/login`
+- **Body (JSON)**:
+  ```json
+  {
+    "username": "admin",
+    "password": "password123"
+  }
+  ```
+> **Action**: Copy the `token` from the JSON response. For all subsequent endpoints, open Postman's **Authorization** tab, select **Bearer Token**, and paste your token there.
+
+#### 3. Create Task (`POST /api/v1/tasks`)
+- **URL**: `http://localhost:8080/api/v1/tasks`
+- **Auth**: Bearer Token Required.
+- **Body (JSON)**:
+  ```json
+  {
+    "title": "Scale Database Infrastructure",
+    "description": "Establish a Redis cluster for rapid caching lookups.",
+    "status": "PENDING"
+  }
+  ```
+
+#### 4. Get Tasks (`GET /api/v1/tasks`)
+- **URL**: `http://localhost:8080/api/v1/tasks`
+- **Auth**: Bearer Token Required.
+- **Body**: None.
+
+#### 5. Update Task (`PUT /api/v1/tasks/{id}`)
+- **URL**: `http://localhost:8080/api/v1/tasks/1` *(replace `1` with a valid Task ID)*
+- **Auth**: Bearer Token Required.
+- **Body (JSON)**:
+  ```json
+  {
+    "title": "Scale Database Infrastructure - Urgent",
+    "description": "Establish a Redis cluster for rapid caching before the weekend launch.",
+    "status": "IN_PROGRESS"
+  }
+  ```
+
+#### 6. Delete Task (`DELETE /api/v1/tasks/{id}`)
+- **URL**: `http://localhost:8080/api/v1/tasks/1` *(replace `1` with a valid Task ID)*
+- **Auth**: Bearer Token Required.
+- **Body**: None.
+
 ## 🛠️ How to Boot & Run Locally
 
 ### 1. Database Configuration
