@@ -109,6 +109,28 @@ If you prefer to test via Postman natively without Swagger, here is the exact st
 - **Auth**: Bearer Token Required.
 - **Body**: None.
 
+## 📸 Application & API Testing Screenshots
+The screenshots below verify the functional interface, routing logic, and raw Postman JSON API throughput processing the JWT securely.
+
+### Full Visual Verification
+<details>
+  <summary>Click to expand application and Postman screenshots</summary>
+
+  <br />
+  <img src="./assets/Screenshot%202026-03-28%20233654.png" alt="Application Screenshot 1" width="800" />
+  <br />
+  <img src="./assets/Screenshot%202026-03-28%20233744.png" alt="Application Screenshot 2" width="800" />
+  <br />
+  <img src="./assets/Screenshot%202026-03-28%20233957.png" alt="Application Screenshot 3" width="800" />
+  <br />
+  <img src="./assets/Screenshot%202026-03-28%20234014.png" alt="Application Screenshot 4" width="800" />
+  <br />
+  <img src="./assets/Screenshot%202026-03-28%20234059.png" alt="Application Screenshot 5" width="800" />
+  <br />
+  <img src="./assets/Screenshot%202026-03-28%20234234.png" alt="Application Screenshot 6" width="800" />
+
+</details>
+
 ## 🛠️ How to Boot & Run Locally
 
 ### 1. Database Configuration
