@@ -1,6 +1,6 @@
 package com.intern.backend.security;
 
-import com.intern.backend.model.User;
+import com.intern.backend.entity.User;
 import com.intern.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

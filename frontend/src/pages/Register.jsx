@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:8080/api/auth/';
+import api from '../services/api';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -15,16 +13,12 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(API_URL + 'signup', {
-        username,
-        password,
-        role
-      });
-      setSuccess(response.data.message);
+      const response = await api.post('/auth/register', { username, password, role });
+      setSuccess(response.data.message || 'Registered successfully!');
       setError('');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError(err.response?.data?.message || err.response?.data || 'Registration failed');
       setSuccess('');
     }
   };
@@ -38,7 +32,7 @@ export default function Register() {
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">Username</label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 focus:outline-none focus:shadow-outline"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -48,7 +42,7 @@ export default function Register() {
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 mb-3 focus:outline-none focus:shadow-outline"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -58,7 +52,7 @@ export default function Register() {
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">Role</label>
           <select
-            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow border rounded w-full py-2 px-3 focus:outline-none"
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
@@ -67,15 +61,10 @@ export default function Register() {
           </select>
         </div>
         <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
             Register
           </button>
-          <Link to="/login" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-            Login instead?
-          </Link>
+          <Link to="/login" className="text-sm text-blue-500 hover:text-blue-800 font-bold">Login instead?</Link>
         </div>
       </form>
     </div>

@@ -1,4 +1,4 @@
-package com.intern.backend.model;
+package com.intern.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

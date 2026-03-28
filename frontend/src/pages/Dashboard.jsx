@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:8080/api/tasks';
+import { useState, useEffect, useContext } from 'react';
+import api from '../services/api';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -11,17 +10,11 @@ export default function Dashboard() {
   const [editId, setEditId] = useState(null);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  
-  const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user'));
-  
-  const axiosInstance = axios.create({
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  const { user } = useContext(AuthContext);
 
   const fetchTasks = async () => {
     try {
-      const response = await axiosInstance.get(API_URL);
+      const response = await api.get('/tasks');
       setTasks(response.data);
     } catch (err) {
       setError('Failed to fetch tasks');
@@ -36,10 +29,10 @@ export default function Dashboard() {
     e.preventDefault();
     try {
       if (editId) {
-        await axiosInstance.put(`${API_URL}/${editId}`, { title, description, status });
+        await api.put(`/tasks/${editId}`, { title, description, status });
         setMessage('Task updated successfully');
       } else {
-        await axiosInstance.post(API_URL, { title, description, status });
+        await api.post('/tasks', { title, description, status });
         setMessage('Task created successfully');
       }
       setTitle('');
@@ -55,7 +48,7 @@ export default function Dashboard() {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`${API_URL}/${id}`);
+      await api.delete(`/tasks/${id}`);
       fetchTasks();
       setMessage('Task deleted');
       setTimeout(() => setMessage(''), 3000);
@@ -87,57 +80,57 @@ export default function Dashboard() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 list-none focus:outline-none"
             />
             <textarea
               placeholder="Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none"
             />
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="shadow border rounded w-full py-2 px-3 text-gray-700"
+              className="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none"
             >
               <option value="PENDING">Pending</option>
               <option value="IN_PROGRESS">In Progress</option>
               <option value="COMPLETED">Completed</option>
             </select>
           </div>
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded font-bold">
             {editId ? 'Update' : 'Create'}
           </button>
           {editId && (
-            <button type="button" onClick={() => { setEditId(null); setTitle(''); setDescription(''); }} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded">
+            <button type="button" onClick={() => { setEditId(null); setTitle(''); setDescription(''); }} className="ml-2 bg-gray-500 text-white px-4 py-2 rounded font-bold">
               Cancel
             </button>
           )}
         </form>
 
         <div>
-          <h3 className="text-xl mb-4">Your Tasks</h3>
-          <div className="grid gap-4">
-            {tasks.map(task => (
-              <div key={task.id} className="border p-4 rounded bg-white shadow flex justify-between items-center">
-                <div>
-                  <h4 className="font-bold text-lg">{task.title}</h4>
-                  <p className="text-gray-600">{task.description}</p>
-                  <span className={`inline-block px-2 py-1 text-sm rounded ${
-                    task.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 
-                    task.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    {task.status}
-                  </span>
-                </div>
-                <div>
-                  <button onClick={() => handleEdit(task)} className="bg-yellow-500 text-white px-3 py-1 rounded mr-2">Edit</button>
-                  <button onClick={() => handleDelete(task.id)} className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
-                </div>
-              </div>
-            ))}
-            {tasks.length === 0 && <p>No tasks found.</p>}
-          </div>
+           <h3 className="text-xl mb-4">Your Tasks</h3>
+           <div className="grid gap-4">
+             {tasks.map(task => (
+               <div key={task.id} className="border p-4 rounded bg-white shadow flex justify-between items-center">
+                 <div>
+                   <h4 className="font-bold text-lg">{task.title}</h4>
+                   <p className="text-gray-600">{task.description}</p>
+                   <span className={`inline-block px-2 py-1 mt-2 text-sm font-semibold rounded shadow-sm ${
+                     task.status === 'COMPLETED' ? 'bg-green-100 text-green-800' : 
+                     task.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'
+                   }`}>
+                     {task.status}
+                   </span>
+                 </div>
+                 <div>
+                   <button onClick={() => handleEdit(task)} className="bg-yellow-500 text-white font-bold shadow px-3 py-1 rounded mr-2 hover:bg-yellow-600">Edit</button>
+                   <button onClick={() => handleDelete(task.id)} className="bg-red-500 text-white font-bold shadow px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                 </div>
+               </div>
+             ))}
+             {tasks.length === 0 && <p className="text-gray-500 italic">No tasks found.</p>}
+           </div>
         </div>
       </div>
     </div>

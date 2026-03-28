@@ -1,7 +1,7 @@
 package com.intern.backend.repository;
 
-import com.intern.backend.model.Task;
-import com.intern.backend.model.User;
+import com.intern.backend.entity.Task;
+import com.intern.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
